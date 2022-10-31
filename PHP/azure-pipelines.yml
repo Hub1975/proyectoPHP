@@ -1,0 +1,42 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  phpVersion: 7.2
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'conectionphp'
+    subscriptionId: 'c20e0080-d670-4c26-9958-593333979a90'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'proyectophp'
+    location: 'West Europe'
+    templateLocation: 'URL of the file'
+    csmFileLink: 'https://dev.azure.com/joseramon0205/proyectophp/_git/php?path=/azuredeploy.json&version=GBmaster'
+    overrideParameters: '-projectName proyectophp'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
+- task: ArchiveFiles@2
+  displayName: 'Archive Files'
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    archiveType: 'zip'
+    includeRootFolder: false
+    replaceExistingArchive: true
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.DefinitionName).$(Build.BuildId).zip'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    ArtifactName: 'drop'
+    PathtoPublish: $(Build.ArtifactStagingDirectory)
