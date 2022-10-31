@@ -20,6 +20,6 @@ steps:
     location: 'West Europe'
     templateLocation: 'URL of the file'
     csmFileLink: 'https://raw.githubusercontent.com/nahuic72/josecitoARM/main/CreateWebApp/azuredeploy.json'
-    overrideParameters: '-projectName josecitoarmweb'
+    overrideParameters: '-projectName josecitoarm'
     deploymentMode: 'Incremental'
     deploymentName: 'DeployPipelineTemplate'
